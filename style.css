@@ -16,6 +16,7 @@ h1 {
 }
 h1, h2, h3, h4, h5, h6 {
   font-weight: 100;
+  line-height: 2em;
 }
 
 .guess, #result, .difference {
@@ -30,4 +31,13 @@ h1, h2, h3, h4, h5, h6 {
 
 img {
   height: 200px;
+}
+
+a {
+  color: #fff;
+  text-decoration: underscore;
+}
+
+a:hover, a:visited, a:active {
+  color: #fff;
 }
