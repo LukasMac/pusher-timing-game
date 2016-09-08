@@ -1,0 +1,33 @@
+.stage {
+  display: none;
+}
+
+body {
+  background: url(3.jpg);
+  padding: 75px 0 40px 0;
+  font-family: Roboto;
+  font-weight: 100;
+  color: #fff;
+  text-align: center;
+}
+
+h1 {
+  font-size: 55px;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 100;
+}
+
+.guess, #result, .difference {
+  font-weight: 300;
+  background-color: rgba(0, 0, 0, 0.38);
+  padding: 10px;
+  border-radius: 10px;
+}
+.difference {
+  color: #ff6363;
+}
+
+img {
+  height: 200px;
+}

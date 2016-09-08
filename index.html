@@ -1,0 +1,109 @@
+<html>
+<head>
+  <title>Pusher timing game</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>
+  <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
+  <script>
+    var pusher = new Pusher('57cad681aa44cad36271', {cluster:'eu'})
+    var button = pusher.subscribe('button-timinggame')
+  </script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,500,500italic"> 
+  <link rel="stylesheet" media="all" href="style.css" />
+
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div id="stage-0" class="stage">
+        <h1>Hello!</h1>
+        <h2>Welcome to pusher timing game.</h2>
+        </br>
+        <h4>Press and hold the button for <span class="guess"></span> seconds without looking to clock!</h4>
+        <img src="off.png">
+      </div>
+      <div id="stage-1" class="stage">
+        <h1>Keep holding it for <span class="guess"></span> seconds.</h1>
+        <img src="on.png">
+      </div>
+      <div id="stage-2" class="stage">
+        <h2>You've holded button for: <span id="result"></span> seconds.<span id="result-text"></span></h2>
+        
+        </br>
+        <h1 id="result-comment"></h1>
+        <img src="off.png">
+        </br>
+        <h5>Press the button to restart the game.</h5>
+      </div>
+
+      </div>
+    </div>
+    
+  </div>
+  <script>
+    var gameState = {
+      stage: 0,
+      guess: 8 + Math.floor((Math.random()*20)),
+      playing: false,
+    }
+
+    function play() {
+      $(".guess").text(gameState.guess);
+
+      console.log(gameState.stage);
+      $(".stage").hide();
+      $("#stage-" + gameState.stage).show();
+      switch(gameState.stage) {
+        case 0:
+          gameState.stage++;
+          break;
+        case 1:
+          gameState.playing = true;
+          gameState.startTime = new Date().getTime();
+          break;
+        case 2:
+          gameState.guessed = (gameState.endTime - gameState.startTime) / 1000;
+          var difference = Math.round((gameState.guess - gameState.guessed) * 1000) / 1000;
+          $("#result").text(gameState.guessed);
+          $("#result-text").html("You've missed by <span class=\"difference\">"+ difference + "</span> seconds");
+          $("#result-comment").text(resultComment(difference));
+          gameState.playing = false;
+          gameState.guess = 8 + Math.floor((Math.random()*20));
+          gameState.stage = 0;
+          break;
+      }
+
+    }
+
+    function resultComment(difference) {
+      difference = Math.abs(difference);
+
+      if (difference <= 1) {
+        return "Whoa! You hell of a Pusher!!! Gold medal!";
+      } else if (difference <= 2) {
+        return "Nice timing bro! You've earned Silver medal, but you still can do better.";
+      } else if (difference <= 3) {
+        return "Under 3 seconds. Not bad I could give you bronze medal for this.";
+      } else if (difference <= 5) {
+        return "Keep trying, you are on the right track.";
+      } else {
+        return "Really? Just try again.";
+      }
+    }
+
+    button.bind('press', function(data) {
+      play();
+    });
+    button.bind('release', function(data) {
+      if (gameState.playing) {
+        gameState.stage++;
+        gameState.endTime = new Date().getTime();
+        play();
+      }
+    });
+    play();
+  </script>
+</body>
+</html>
+
